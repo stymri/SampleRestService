@@ -1,17 +1,20 @@
 package rai.satyam.SampleRestService.controller;
 
 import java.net.URI;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import rai.satyam.SampleRestService.entity.Login;
+import rai.satyam.SampleRestService.entity.LoginForm;
 import rai.satyam.SampleRestService.repositories.LoginRepository;
 
 @RestController
@@ -33,7 +36,9 @@ public class LoginController {
 	}
 	
 	@PostMapping(path = "/Login")
-	public ResponseEntity<?> checkLogin(@Valid @RequestBody Login login) {
+	public ResponseEntity<?> checkLogin(@Valid @RequestBody LoginForm login) {
+	
+	
 		if (loginRepository.existsById(login.getUserName())) {
 			Login loginDetail = loginRepository.findById(login.getUserName()).get();
 			System.out.println(loginDetail.getPassword());
@@ -49,5 +54,9 @@ public class LoginController {
 		}	
 	}
 	
+	@GetMapping(path = "/Login")
+	public List<Login> getLogin(String gender , String dateOfBirth){
+		return loginRepository.findLoginByGenderAndDateOfBirth(gender, dateOfBirth);
+	}
 
 }
